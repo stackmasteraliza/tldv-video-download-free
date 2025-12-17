@@ -60,7 +60,7 @@ pip install requests
 4. 🛠️ **Developer Tools**: Press `F12` to open browser developer tools
 5. 📡 **Network Tab**: Click on the "Network" tab
 6. 🔄 **Refresh Page**: Refresh the page (`Ctrl+R` or `Cmd+R`)
-7. 🔍 **Find Request**: Look for the request containing `/watch-page?noTranscript=true`
+7. 🔍 **Find Request**: Look for the request having title `auth`
 8. 🏷️ **Copy Token**: Right-click the request → Copy → Copy as cURL, then extract the `Authorization: Bearer <token>` header
 9. ⚙️ **Configure Script**: Edit `tldv.py` and update:
    - `url` variable with your meeting URL

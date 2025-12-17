@@ -3,26 +3,6 @@ from os import system
 import requests
 import json
 
-## Please install ffmpeg before running this script and make sure it's in your PATH
-## brew install ffmpeg
-
-## Please install requests before running this script
-## pip3 install requests
-
-## download video from tldv.io
-##
-## 1. Go to https://tldv.io/
-## 2. Login
-## 3. Go to the meeting you want to download
-## 4. Copy the URL of the meeting
-## 5. Open the developer tools (F12)
-## 6. Go to the network tab
-## 7. Refresh the page
-## 8. Find the request to https://gw.tldv.io/v1/meetings/64145828ced74b0013d496ce/watch-page?noTranscript=true
-## 9. Copy the auth token from the request headers
-## 10. Run this script and paste the URL and auth token
-## 11. python3 tldv.py
-
 # Replace with your meeting URL from tldv.io
 url = ""
 
