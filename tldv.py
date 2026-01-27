@@ -4,17 +4,17 @@ import requests
 import json
 
 # Replace with your meeting URL from tldv.io
-url = ""
+url = "https://tldv.io/app/meetings/YOUR_MEETING_ID_HERE"
 
 meeting_id = url.split("/")[-1]
 
 print("\rFound meeting ID: ", meeting_id)
 
 # Replace with your auth token from browser developer tools
-auth_token = ""
+auth_token = "Bearer YOUR_AUTH_TOKEN_HERE"
 
 data = requests.get(
-    f"https://gw.tldv.io/v1/meetings/{meeting_id}/watch-page?noTranscript=true",
+    f"https://gw.tldv.io/v1/meetings/{meeting_id}/watch-page",
     headers={
         "Authorization": auth_token,
     },
@@ -41,6 +41,35 @@ try:
 
     with open(json_filename, "w") as f:
         f.write(data.text)
+
+    # Extract and save transcript
+    transcript_data = response.get("video", {}).get("transcript", {}).get("data", [])
+
+    if transcript_data:
+        transcript_filename = f'{filename}_transcript.txt'
+        with open(transcript_filename, "w", encoding="utf-8") as f:
+            for segment in transcript_data:
+                if not segment:
+                    continue
+                # Get speaker and timestamp from first word in segment
+                first_word = segment[0]
+                speaker = first_word.get("speaker", "Unknown")
+                start_time = first_word.get("startTime", {})
+                seconds_total = int(start_time.get("seconds", 0))
+
+                # Convert to mm:ss format
+                minutes = seconds_total // 60
+                seconds = seconds_total % 60
+                timestamp = f"{minutes:02d}:{seconds:02d}"
+
+                # Combine all words in segment
+                text = " ".join(word.get("word", "") for word in segment)
+
+                f.write(f"[{timestamp}] {speaker}: {text}\n")
+
+        print(f"Transcript saved to: {transcript_filename}")
+    else:
+        print("No transcript available for this meeting")
 
     print(command)
 

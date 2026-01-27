@@ -11,6 +11,7 @@ A lightweight Python script to download TLDV (Too Long Didn't View) meeting reco
 ## ✨ Features
 
 - 🚀 **Fast Downloads** - Direct video fetching from TLDV servers
+- 📝 **Transcript Export** - Automatically saves meeting transcripts with timestamps and speaker names
 - 🔒 **Secure** - Uses your own authentication tokens
 - 💾 **Offline Access** - Store videos locally for anytime viewing
 - 📱 **Cross-Platform** - Works on Windows, macOS, and Linux
@@ -81,6 +82,17 @@ pip install requests
 The script will generate:
 - `YYYY-MM-DD-HH-MM-SS_MeetingName.mp4` - Your downloaded video
 - `YYYY-MM-DD-HH-MM-SS_MeetingName.json` - Meeting metadata
+- `YYYY-MM-DD-HH-MM-SS_MeetingName_transcript.txt` - Meeting transcript with timestamps
+
+### Transcript Format
+
+The transcript file contains speaker-attributed text with timestamps:
+
+```
+[00:00] Speaker Name: Hello everyone, welcome to the meeting.
+[00:15] Another Speaker: Thanks for having me.
+[01:30] Speaker Name: Let's get started with the agenda.
+```
 
 ## ⚠️ Important Notes
 
