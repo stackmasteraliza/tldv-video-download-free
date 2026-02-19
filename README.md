@@ -1,4 +1,4 @@
-# 🎥 TLDV Meeting Video Downloader
+# 🎥 TLDV Video Downloader
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/)
@@ -6,29 +6,42 @@
 
 > **Download your TLDV meeting recordings instantly!** 🚀
 
-A lightweight Python script to download TLDV (Too Long Didn't View) meeting recordings for offline viewing. Save important meetings, presentations, and discussions without internet dependency. Perfect for professionals, students, and teams who need quick access to their meeting content.
+A lightweight Python CLI tool to download [TLDV](https://tldv.io) meeting recordings for offline viewing. Perfect for professionals, students, and teams who need quick access to their meeting content with beautiful progress tracking.
 
 ## ✨ Features
 
-- 🚀 **Fast Downloads** - Direct video fetching from TLDV servers
-- 📝 **Transcript Export** - Automatically saves meeting transcripts with timestamps and speaker names
-- 🔒 **Secure** - Uses your own authentication tokens
-- 💾 **Offline Access** - Store videos locally for anytime viewing
-- 📱 **Cross-Platform** - Works on Windows, macOS, and Linux
-- 🎯 **Simple Setup** - Minimal dependencies, easy installation
+- 🚀 **Fast Downloads** — Direct video stream copy from TLDV servers (no re-encoding)
+- 📊 **Live Progress Bar** — Beautiful real-time download progress with speed, ETA, and statistics
+- 📝 **Transcript Export** — Saves meeting transcripts with timestamps and speaker names
+- 🎯 **Flexible Input** — Pass meeting URL and token via CLI flags, environment variables, or interactive prompts
+- 🔍 **Auto-detect FFmpeg** — Finds ffmpeg on your PATH automatically
+- 💻 **Cross-Platform** — Works on Windows, macOS, and Linux
+- 🎨 **Beautiful UI** — Rich terminal interface with panels, tables, and color-coded output
 
 ## 📋 Prerequisites
 
 - Python 3.6 or higher
-- FFmpeg (for video processing)
+- [FFmpeg](https://ffmpeg.org/download.html)
+- Python packages: `requests`, `rich`
 
 ## 🛠️ Installation
 
-### 1. Install FFmpeg
+### 1. Clone the Repository
+```bash
+git clone https://github.com/stackmasteraliza/tldv-video-download-free.git
+cd tldv-video-download-free
+```
+
+### 2. Install Python Dependencies
+```bash
+pip install requests rich
+```
+
+### 3. Install FFmpeg
 
 Choose your platform:
 
-#### 🪟 Windows (Recommended)
+#### 🪟 Windows
 ```powershell
 winget install ffmpeg
 ```
@@ -44,45 +57,74 @@ sudo apt update && sudo apt install ffmpeg
 ```
 
 #### 📥 Manual Download
-Download FFmpeg from [ffmpeg.org](https://ffmpeg.org/download.html) and add to your system PATH.
+Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to your system PATH.
 
-### 2. Install Python Dependencies
+## 🚀 Usage
+
+### Method 1: Interactive Mode (Easiest)
+
+Simply run the script and follow the prompts:
+
 ```bash
-pip install requests
+python tldv.py
 ```
 
-## 🚀 Usage Guide
+You'll be asked to enter:
+1. Meeting URL or ID
+2. Bearer token
 
-### Step-by-Step Instructions
+### Method 2: Command-Line Arguments
 
-1. 🌐 **Visit TLDV**: Go to [tldv.io](https://tldv.io/) and log in to your account
-2. 📹 **Find Meeting**: Navigate to the meeting you want to download
-3. 🔗 **Copy URL**: Copy the meeting URL from your browser address bar
-4. 🛠️ **Developer Tools**: Press `F12` to open browser developer tools
-5. 📡 **Network Tab**: Click on the "Network" tab
-6. 🔄 **Refresh Page**: Refresh the page (`Ctrl+R` or `Cmd+R`)
-7. 🔍 **Find Request**: Look for the request having title `auth`
-8. 🏷️ **Copy Token**: Right-click the request → Copy → Copy as cURL, then extract the `Authorization: Bearer <token>` header
-9. ⚙️ **Configure Script**: Edit `tldv.py` and update:
-   - `url` variable with your meeting URL
-   - `auth_token` variable with your Bearer token
-10. ▶️ **Run Script**:
-    ```bash
-    python tldv.py
-    ```
+```bash
+python tldv.py --url "https://tldv.io/app/meetings/abc123" --token "Bearer eyJ..."
+```
 
-## 📸 Visual Guide
+### Method 3: Environment Variables
+
+```bash
+export TLDV_URL="https://tldv.io/app/meetings/abc123"
+export TLDV_TOKEN="Bearer eyJ..."
+python tldv.py
+```
+
+### 📝 All Available Options
+
+```
+usage: tldv.py [-h] [-u URL] [-t TOKEN] [-o OUTPUT_DIR] [--ffmpeg FFMPEG] [--ffprobe FFPROBE]
+
+Options:
+  -u, --url URL           TLDV meeting URL or meeting ID
+  -t, --token TOKEN       Authorization token (Bearer token from browser dev tools)
+  -o, --output-dir DIR    Directory to save downloaded files (default: current directory)
+  --ffmpeg FFMPEG         Path to ffmpeg binary (auto-detected if not provided)
+  --ffprobe FFPROBE       Path to ffprobe binary (auto-detected if not provided)
+```
+
+## 🔑 How to Get Your Auth Token
+
+Follow these steps to extract your authentication token:
+
+1. 🌐 **Visit TLDV**: Go to [tldv.io](https://tldv.io) and log in to your account
+2. 📹 **Open Meeting**: Navigate to the meeting you want to download
+3. 🛠️ **Developer Tools**: Press **F12** to open browser developer tools
+4. 📡 **Network Tab**: Click on the **Network** tab
+5. 🔄 **Refresh Page**: Refresh the page (**Ctrl+R** or **Cmd+R**)
+6. 🔍 **Find Request**: Look for a request named `auth` or `watch-page`
+7. 🏷️ **Copy Token**: Click the request → Find the `Authorization` header → Copy the full `Bearer eyJ...` value
 
 ![How to get auth token](screenshots/guiding_screentshot.png)
 
-*This screenshot demonstrates how to find and copy the authentication token from browser developer tools.*
+*Visual guide showing how to extract the authentication token from browser developer tools.*
 
-## 📁 Output
+## 📁 Output Files
 
-The script will generate:
-- `YYYY-MM-DD-HH-MM-SS_MeetingName.mp4` - Your downloaded video
-- `YYYY-MM-DD-HH-MM-SS_MeetingName.json` - Meeting metadata
-- `YYYY-MM-DD-HH-MM-SS_MeetingName_transcript.txt` - Meeting transcript with timestamps
+The script generates three files in the output directory:
+
+| File | Description |
+|------|-------------|
+| `YYYY-MM-DD-HH-MM-SS_MeetingName.mp4` | 🎥 Meeting video |
+| `YYYY-MM-DD-HH-MM-SS_MeetingName.json` | 📄 Raw API metadata |
+| `YYYY-MM-DD-HH-MM-SS_MeetingName_transcript.txt` | 📝 Formatted transcript |
 
 ### Transcript Format
 
@@ -96,21 +138,26 @@ The transcript file contains speaker-attributed text with timestamps:
 
 ## ⚠️ Important Notes
 
-- 🔐 **Security**: Never share your authentication tokens
-- 📅 **Expiration**: Tokens may expire, requiring fresh extraction
-- 🌐 **Internet Required**: Initial download needs internet connection
-- 📝 **Legal**: Only download meetings you have access to
+- 🔐 **Security**: Never share your authentication tokens publicly
+- 📅 **Token Expiration**: Tokens may expire, requiring fresh extraction from browser
+- 🌐 **Internet Required**: Initial download requires internet connection
+- 📝 **Legal**: Only download meetings you have legitimate access to
+- 🔒 **Privacy**: The `.gitignore` excludes `.env` files to protect your credentials
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## 👨‍💻 Author
+
+**Aliza Ali** — [GitHub](https://github.com/stackmasteraliza)
+
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  <strong>Built with ❤️ for the developer community</strong>
+  <strong>Built with ❤️ by Aliza Ali</strong>
 </p>
