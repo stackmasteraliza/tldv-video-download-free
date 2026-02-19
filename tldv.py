@@ -250,7 +250,7 @@ def step_warn(msg):
 
 
 def extract_meeting_id(url):
-    """Extract the meeting ID from a TLDV meeting URL or bare ID."""
+    """Extract the meeting ID from a TLDV meeting URL."""
     if url.startswith("http"):
         return url.rstrip("/").split("/")[-1]
     return url.strip()
@@ -316,7 +316,7 @@ def parse_args():
         description="TLDV Video Downloader by Aliza Ali — download meeting recordings with transcripts.",
         epilog="Example: python tldv.py --url https://tldv.io/app/meetings/abc123 --token 'Bearer eyJ...'",
     )
-    parser.add_argument("-u", "--url", help="TLDV meeting URL or meeting ID")
+    parser.add_argument("-u", "--url", help="TLDV meeting URL")
     parser.add_argument("-t", "--token", help="Authorization token (Bearer token from browser dev tools)")
     parser.add_argument("-o", "--output-dir", default=".", help="Directory to save files (default: current directory)")
     parser.add_argument("--ffmpeg", help="Path to ffmpeg binary (auto-detected if omitted)")
@@ -332,7 +332,7 @@ def get_config(args):
     if not url:
         console.print("  [bold cyan]Enter meeting details[/bold cyan]")
         console.print()
-        url = Prompt.ask("  [cyan]Meeting URL or ID[/cyan]")
+        url = Prompt.ask("  [cyan]Meeting URL[/cyan]")
 
     # ── Auth token ────────────────────────────────────────────────────────
     token = args.token or os.environ.get("TLDV_TOKEN")
